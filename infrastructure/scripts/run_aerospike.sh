@@ -12,7 +12,7 @@ service {
 	service-threads 4
 	transaction-queues 4
 	transaction-threads-per-queue 4
-	proto-fd-max 15000
+	proto-fd-max 1024
 }
 logging {
     file /var/log/aerospike/aerospike.log {
@@ -53,4 +53,4 @@ yum install -y docker
 service docker start
 usermod -a -G docker ec2-user
 
-docker run --init --rm ${command} /usr/bin/asd --foreground --config-file /opt/aerospike/etc/aerospike.conf
+docker run --init --rm ${command} --config-file /opt/aerospike/etc/aerospike.conf

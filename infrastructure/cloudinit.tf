@@ -15,7 +15,7 @@ data "template_file" "tarantool-script" {
 data "template_file" "aerospike-script" {
   template = "${file("scripts/run_aerospike.sh")}"
   vars {
-      command = "--name aerospike -d --net=host -v /home/ec2-user/aerospike.conf:/opt/aerospike/etc/aerospike.conf aerospike/aerospike-server"
+      command = "--name aerospike -d --net=host -v /home/ec2-user/:/opt/aerospike/etc aerospike/aerospike-server"
   }
 }
 
@@ -25,4 +25,3 @@ data "template_file" "ycsb-script" {
       command = "--name ycsb --net=host donchev7/alpine-ycsb:0.12.0 -h"
   }
 }
-
