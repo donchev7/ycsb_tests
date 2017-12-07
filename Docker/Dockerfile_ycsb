@@ -1,0 +1,17 @@
+FROM openjdk:8-jdk-alpine
+LABEL maintainer="contact@donchev.is"
+
+RUN apk add --no-cache tar wget python
+
+#Install YCSB
+ARG YCSB_VERSION
+ENV YCSB_VERSION ${YCSB_VERSION:-0.12.0}
+RUN wget https://github.com/brianfrankcooper/YCSB/releases/download/$YCSB_VERSION/ycsb-$YCSB_VERSION.tar.gz -P /tmp \
+  && mkdir -p /opt/ycsb \
+  && tar -xzf /tmp/ycsb-${YCSB_VERSION}.tar.gz -C /opt/ycsb --strip-components=1 \
+  && rm -rf /tmp/ycsb-${YCSB_VERSION}.tar.gz \
+  && ln -s /opt/ycsb/bin/ycsb /usr/bin/ycsb
+
+WORKDIR /opt/ycsb
+ENTRYPOINT ["/opt/ycsb/bin/ycsb"]
+CMD ["shell", "basic"]

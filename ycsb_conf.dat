@@ -1,0 +1,29 @@
+[YCSB]
+# recordcount=2000000
+# operationcount=5000000
+# threadcount=500
+
+[SERVER]
+redis=10.0.16.6
+elasticache=elasticache-ycsb.jkzj1v.0001.euw1.cache.amazonaws.com
+tarantool=10.0.16.11
+# aerospike=10.16.0.10
+
+# Can be used for 
+# individual workloads
+# workloada=True
+# workloadb=True
+# or for all workloads
+# all=True
+
+[WORKLOAD]
+workloada=True
+workloadb=True
+#all=True
+
+# workloada is Update heavy with 50/50 read/write
+# workloadb is 95/5 read/write 
+# workloadc is Read only
+# workloadd is read latest entries 
+# workloade is short range queries
+# workloadf is read-modify-write

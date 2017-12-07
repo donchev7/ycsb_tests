@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>YCSB Results</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div class="container-fluid">
+  
+  <h1 class="text-center">workloada</h1>
+  
+    <p class="text-center">Update heavy with 50/50 read/write.</p>
+  
+  <div class="row">
+    <div class="col-sm-4" style="background-color:lavender;"><h3 class="text-center">Insert</h3></div>
+    <div class="col-sm-4" style="background-color:lavenderblush;"><h3 class="text-center">Read</h3></div>
+    <div class="col-sm-4" style="background-color:lavender;"><h3 class="text-center">Update</h3></div>
+  </div>
+
+  <div class="row">
+  	<div class="col-sm-4" style="padding-right:0px; padding-left:0px;">
+    	<table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Avg (ms)</th>
+            <th>Min (ms)</th>
+            <th>Max (ms)</th>
+            <th>95% (ms)</th>
+            <th>99% (ms)</th>
+            <th>Ops/sec</th>
+          </tr>
+        </thead>
+      
+      <tbody>
+        <tr>
+          <td>redis</td>
+          <td>0.28</td>
+          <td>0.24</td>
+          <td>6.16</td>
+          <td>0.36</td>
+          <td>0.47</td>
+          <td>2985.1</td>
+        </tr>
+      </tbody>
+      
+      <tbody>
+        <tr>
+          <td>elasticache</td>
+          <td>0.29</td>
+          <td>0.22</td>
+          <td>7.5</td>
+          <td>0.45</td>
+          <td>0.62</td>
+          <td>2710.0</td>
+        </tr>
+      </tbody>
+      
+      <tbody>
+        <tr>
+          <td>tarantool</td>
+          <td>nan</td>
+          <td>9223372036854776.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+          <td>0.0</td>
+        </tr>
+      </tbody>
+      
+    </table>
+  </div>
+  <div class="col-sm-4" style="padding-right:0px; padding-left:0px;">
+    	<table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Avg (ms)</th>
+            <th>Min (ms)</th>
+            <th>Max (ms)</th>
+            <th>95% (ms)</th>
+            <th>99% (ms)</th>
+            <th>Ops/sec</th>
+          </tr>
+        </thead>
+        
+        <tbody>
+          <tr>
+            <td>redis</td>
+            <td>0.18</td>
+            <td>0.12</td>
+            <td>9.47</td>
+            <td>0.22</td>
+            <td>0.27</td>
+            <td>4444.4</td>
+          </tr>
+        </tbody>
+        
+        <tbody>
+          <tr>
+            <td>elasticache</td>
+            <td>0.15</td>
+            <td>0.11</td>
+            <td>4.33</td>
+            <td>0.19</td>
+            <td>0.24</td>
+            <td>4926.1</td>
+          </tr>
+        </tbody>
+        
+        <tbody>
+          <tr>
+            <td>tarantool</td>
+            <td>nan</td>
+            <td>9223372036854776.0</td>
+            <td>0.0</td>
+            <td>0.0</td>
+            <td>0.0</td>
+            <td>1886.8</td>
+          </tr>
+        </tbody>
+        
+    </table>
+  </div>
+  <div class="col-sm-4" style="padding-right:0px; padding-left:0px;">
+    	<table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Avg (ms)</th>
+            <th>Min (ms)</th>
+            <th>Max (ms)</th>
+            <th>95% (ms)</th>
+            <th>99% (ms)</th>
+            <th>Ops/sec</th>
+          </tr>
+        </thead>
+        
+        <tbody>
+          <tr>
+            <td>redis</td>
+            <td>0.16</td>
+            <td>0.12</td>
+            <td>0.85</td>
+            <td>0.2</td>
+            <td>0.24</td>
+            <td>4444.4</td>
+          </tr>
+        </tbody>
+         
+        <tbody>
+          <tr>
+            <td>elasticache</td>
+            <td>0.14</td>
+            <td>0.11</td>
+            <td>4.07</td>
+            <td>0.17</td>
+            <td>0.2</td>
+            <td>4926.1</td>
+          </tr>
+        </tbody>
+         
+        <tbody>
+          <tr>
+            <td>tarantool</td>
+            <td>0.47</td>
+            <td>0.35</td>
+            <td>1.67</td>
+            <td>0.76</td>
+            <td>0.96</td>
+            <td>1886.8</td>
+          </tr>
+        </tbody>
+         
+  </table>
+  </div>
+  </div>
+
+  <h1 class="text-center">workloadb</h1>
+  
+    <p class="text-center">Read heavy with 95/5 read/write.</p>
+  
+  <div class="row">
+    <div class="col-sm-4" style="background-color:lavender;"><h3 class="text-center">Insert</h3></div>
+    <div class="col-sm-4" style="background-color:lavenderblush;"><h3 class="text-center">Read</h3></div>
+    <div class="col-sm-4" style="background-color:lavender;"><h3 class="text-center">Update</h3></div>
+  </div>
+
+  <div class="row">
+  	<div class="col-sm-4" style="padding-right:0px; padding-left:0px;">
+    	<table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Avg (ms)</th>
+            <th>Min (ms)</th>
+            <th>Max (ms)</th>
+            <th>95% (ms)</th>
+            <th>99% (ms)</th>
+            <th>Ops/sec</th>
+          </tr>
+        </thead>
+      
+    </table>
+  </div>
+  <div class="col-sm-4" style="padding-right:0px; padding-left:0px;">
+    	<table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Avg (ms)</th>
+            <th>Min (ms)</th>
+            <th>Max (ms)</th>
+            <th>95% (ms)</th>
+            <th>99% (ms)</th>
+            <th>Ops/sec</th>
+          </tr>
+        </thead>
+        
+        <tbody>
+          <tr>
+            <td>redis</td>
+            <td>0.18</td>
+            <td>0.12</td>
+            <td>5.39</td>
+            <td>0.22</td>
+            <td>0.28</td>
+            <td>4405.3</td>
+          </tr>
+        </tbody>
+        
+        <tbody>
+          <tr>
+            <td>elasticache</td>
+            <td>0.16</td>
+            <td>0.11</td>
+            <td>6.52</td>
+            <td>0.2</td>
+            <td>0.32</td>
+            <td>4717.0</td>
+          </tr>
+        </tbody>
+        
+        <tbody>
+          <tr>
+            <td>tarantool</td>
+            <td>nan</td>
+            <td>9223372036854776.0</td>
+            <td>0.0</td>
+            <td>0.0</td>
+            <td>0.0</td>
+            <td>1872.7</td>
+          </tr>
+        </tbody>
+        
+    </table>
+  </div>
+  <div class="col-sm-4" style="padding-right:0px; padding-left:0px;">
+    	<table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Avg (ms)</th>
+            <th>Min (ms)</th>
+            <th>Max (ms)</th>
+            <th>95% (ms)</th>
+            <th>99% (ms)</th>
+            <th>Ops/sec</th>
+          </tr>
+        </thead>
+        
+        <tbody>
+          <tr>
+            <td>redis</td>
+            <td>0.16</td>
+            <td>0.12</td>
+            <td>3.67</td>
+            <td>0.19</td>
+            <td>0.23</td>
+            <td>4405.3</td>
+          </tr>
+        </tbody>
+         
+        <tbody>
+          <tr>
+            <td>elasticache</td>
+            <td>0.15</td>
+            <td>0.11</td>
+            <td>3.14</td>
+            <td>0.18</td>
+            <td>0.21</td>
+            <td>4717.0</td>
+          </tr>
+        </tbody>
+         
+        <tbody>
+          <tr>
+            <td>tarantool</td>
+            <td>0.48</td>
+            <td>0.34</td>
+            <td>2.25</td>
+            <td>0.81</td>
+            <td>0.99</td>
+            <td>1872.7</td>
+          </tr>
+        </tbody>
+         
+  </table>
+  </div>
+  </div>
+
+</div>
+</body>
+</html>

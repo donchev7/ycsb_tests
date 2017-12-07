@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>YCSB Results</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div class="container-fluid">
+  {% for workload in workloads|sort(case_sensitive = True) %}
+  <h1 class="text-center">{{workload}}</h1>
+  {% if workload == 'workloada' %}
+    <p class="text-center">Update heavy with 50/50 read/write.</p>
+  {% elif workload == 'workloadb' %}
+    <p class="text-center">Read heavy with 95/5 read/write.</p>
+  {% elif workload == 'workloadc' %}
+    <p class="text-center">Read only with 100% read.</p>
+  {% elif workload == 'workloadd' %}
+    <p class="text-center">Read latest entries</p>
+  {% elif workload == 'workloade' %}
+    <p class="text-center">Short range queries</p>
+  {% elif workload == 'workloadf' %}
+    <p class="text-center"> Read-modify-write</p>
+  {% endif %}
+  <div class="row">
+    <div class="col-sm-4" style="background-color:lavender;"><h3 class="text-center">Insert</h3></div>
+    <div class="col-sm-4" style="background-color:lavenderblush;"><h3 class="text-center">Read</h3></div>
+    <div class="col-sm-4" style="background-color:lavender;"><h3 class="text-center">Update</h3></div>
+  </div>
+{% set results =  workload_ops.get(workload) %}
+  <div class="row">
+  	<div class="col-sm-4" style="padding-right:0px; padding-left:0px;">
+    	<table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Avg (ms)</th>
+            <th>Min (ms)</th>
+            <th>Max (ms)</th>
+            <th>95% (ms)</th>
+            <th>99% (ms)</th>
+            <th>Ops/sec</th>
+          </tr>
+        </thead>
+      {% for result in results if result['op'] in 'INSERT' %}
+      <tbody>
+        <tr>
+          <td>{{result['server']}}</td>
+          <td>{{result['latencies']['avg']}}</td>
+          <td>{{result['latencies']['min']}}</td>
+          <td>{{result['latencies']['max']}}</td>
+          <td>{{result['latencies']['95p']}}</td>
+          <td>{{result['latencies']['99p']}}</td>
+          <td>{{result['throughput']}}</td>
+        </tr>
+      </tbody>
+      {% endfor %}
+    </table>
+  </div>
+  <div class="col-sm-4" style="padding-right:0px; padding-left:0px;">
+    	<table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Avg (ms)</th>
+            <th>Min (ms)</th>
+            <th>Max (ms)</th>
+            <th>95% (ms)</th>
+            <th>99% (ms)</th>
+            <th>Ops/sec</th>
+          </tr>
+        </thead>
+        {% for result in results if result['op'] in 'READ' %}
+        <tbody>
+          <tr>
+            <td>{{result['server']}}</td>
+            <td>{{result['latencies']['avg']}}</td>
+            <td>{{result['latencies']['min']}}</td>
+            <td>{{result['latencies']['max']}}</td>
+            <td>{{result['latencies']['95p']}}</td>
+            <td>{{result['latencies']['99p']}}</td>
+            <td>{{result['throughput']}}</td>
+          </tr>
+        </tbody>
+        {% endfor %}
+    </table>
+  </div>
+  <div class="col-sm-4" style="padding-right:0px; padding-left:0px;">
+    	<table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Avg (ms)</th>
+            <th>Min (ms)</th>
+            <th>Max (ms)</th>
+            <th>95% (ms)</th>
+            <th>99% (ms)</th>
+            <th>Ops/sec</th>
+          </tr>
+        </thead>
+        {% for result in results if result['op'] in 'UPDATE' %}
+        <tbody>
+          <tr>
+            <td>{{result['server']}}</td>
+            <td>{{result['latencies']['avg']}}</td>
+            <td>{{result['latencies']['min']}}</td>
+            <td>{{result['latencies']['max']}}</td>
+            <td>{{result['latencies']['95p']}}</td>
+            <td>{{result['latencies']['99p']}}</td>
+            <td>{{result['throughput']}}</td>
+          </tr>
+        </tbody>
+         {% endfor %}
+  </table>
+  </div>
+  </div>
+{% endfor %}
+</div>
+</body>
+</html>

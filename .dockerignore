@@ -1,0 +1,8 @@
+.terraform
+.vscode
+Docker/
+infrastructure/
+README.md
+.gitignore
+terraform.tfstate
+terraform.tfstate.backup
