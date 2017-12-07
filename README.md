@@ -1,5 +1,5 @@
 # YCSB Tests
-## for Redis, AWS Elasticache, Tarantool and Aerospike
+## for Aerospike, AWS Elasticache, Redis and Tarantool
 
 For more information about this repository read the post [here](http://donchev.is).
 

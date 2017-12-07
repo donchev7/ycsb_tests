@@ -4,10 +4,10 @@
 # threadcount=500
 
 [SERVER]
-redis=10.0.16.6
+redis=10.0.16.5
 elasticache=elasticache-ycsb.jkzj1v.0001.euw1.cache.amazonaws.com
 tarantool=10.0.16.11
-# aerospike=10.16.0.10
+aerospike=10.0.16.14
 
 # Can be used for 
 # individual workloads
