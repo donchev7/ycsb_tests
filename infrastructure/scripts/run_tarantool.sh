@@ -9,6 +9,7 @@ box.cfg {
    log_level = 5,
    log_nonblock = true,
    wal_mode = "none",
+   memtx_memory = 12884901888,
 }
 
 box.schema.space.create("ycsb", {id = 1024})
