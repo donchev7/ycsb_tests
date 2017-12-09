@@ -55,7 +55,8 @@ class YcsbTest(object):
                     self.command(kind='run', server=server)
                 )
                 self._status(container, stdout)
-                load = self._extract_overall(container)            
+                load = self._extract_overall(container)
+                print(load)
                 for op in ['READ', 'UPDATE']:
                     latencies = self._extract_latencies(load, op=op)
                     self.update_result(load, latencies, server=server,
@@ -149,11 +150,10 @@ class YcsbTest(object):
 
     @staticmethod
     def _extract_throughput(result):
-        print(result)
         return round(float(''.join(
                         [s.split(',')[2] for s in result.split('\n')
-                         if 'Throughput(ops/sec)' in s]
-                         )), 1)
+                         if 'Throughput(ops/sec)' in s] or ['-1'])
+        ), 1)
 
     @staticmethod
     def _extract_latencies(result, op='INSERT'):

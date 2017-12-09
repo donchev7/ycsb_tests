@@ -1,13 +1,13 @@
 [YCSB]
-# recordcount=2000000
-# operationcount=5000000
-# threadcount=500
+recordcount=2000000
+operationcount=5000000
+threadcount=100
 
 [SERVER]
-redis=10.0.16.5
+redis=10.0.16.13
 elasticache=elasticache-ycsb.jkzj1v.0001.euw1.cache.amazonaws.com
-tarantool=10.0.16.11
-aerospike=10.0.16.14
+tarantool=10.0.16.6
+aerospike=10.0.16.12
 
 # Can be used for 
 # individual workloads
