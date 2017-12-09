@@ -3,7 +3,6 @@ from configparser import ConfigParser, ParsingError
 from fire import Fire
 from docker import DockerClient
 import jinja2
-# client = docker.DockerClient(base_url='tcp://YCSB-PUBLIC-IP:2375')
 
 
 config = ConfigParser()
@@ -13,9 +12,12 @@ class YcsbTest(object):
     """
     YCSB Test Runner Class
     Usage:
-    python ycsb.py run --html=True --config_file='ycsb_conf.dat' --docker_host='10.0.0.16'
+    python ycsb.py run --html=True --config_file='ycsb_conf.dat'
+                        --docker_host='tcp://10.0.0.16:2375'
+
     Or via docker socks on local machine:
     python ycsb.py run --html=True --config_file'ycsb_conf.dat'
+
     Want the results printed to stdout rather than a HTML file?
     python ycsb.py run --html=Flase --stdout=True
     """
@@ -28,74 +30,55 @@ class YcsbTest(object):
         self.config.read(config_file)
         self.servers = self._parse_servers()
         self.workloads = self._parse_workloads()
-        self.ycsb_param = self._parse_ycsb_parameters()
+        self.results = []
+
+    def run(self,
+            ycsb_img='donchev7/alpine-ycsb:0.12.0',
+            html=True, stdout=False):
+        if self._has_missing_fields():
+            raise ParsingError(filename=config_file)
+        for server in self.servers:
+            print('Loading server: %(server)s' % locals())
+            container = self.run_container(
+                ycsb_img,
+                self.command(kind='load', server=server)
+            )
+            self._status(container, stdout)
+            load = self._extract_overall(container)
+            latencies = self._extract_latencies(load, op='INSERT')
+            self.update_result(load, latencies, server=server,
+                               workload='workloada', op='INSERT')
+            for workload in self.workloads:
+                print('Running %(workload)s on server: %(server)s\n' % locals())
+                container = self.run_container(
+                    ycsb_img,
+                    self.command(kind='run', server=server)
+                )
+                self._status(container, stdout)
+                load = self._extract_overall(container)            
+                for op in ['READ', 'UPDATE']:
+                    latencies = self._extract_latencies(load, op=op)
+                    self.update_result(load, latencies, server=server,
+                                       workload=workload, op=op)
+
+        if html:
+            self._write_html(self.results)
+        if stdout:
+            print(self.results)
+        return 'Finshed tests'
 
     def command(self, kind='load', server='redis', workload='workloada'):
         ip = self.servers.get(server)
         if 'elasticache' in server:
             server = 'redis'
-            auka = '-p "redis.host=%(ip)s"' %locals()
+            auka = '-p "redis.host=%(ip)s"' % locals()
         elif 'aerospike' in server:
-            auka = '-p "as.host=%(ip)s"' %locals()
+            auka = '-p "as.host=%(ip)s"' % locals()
         else:
-            auka = '-p "%(server)s.host=%(ip)s"' %locals()
+            auka = '-p "%(server)s.host=%(ip)s"' % locals()
         param = self._parse_ycsb_parameters()
-        return '%(kind)s %(server)s -s %(param)s -P workloads/%(workload)s %(auka)s' %locals()
-
-    def run(self, ycsb_img='donchev7/alpine-ycsb:0.12.0', html=True, stdout=False):
-        if self._has_missing_fields():
-            raise ParsingError(filename=config_file)
-        results = []
-        for server in self.servers:
-            print('Loading server: %(server)s\n' %locals())
-            load = self.docker_client.containers.run(
-                image=ycsb_img,
-                init=True,
-                network_mode='host',
-                command=self.command(kind='load', server=server)
-            ).decode('utf8')
-            latencies = self._extract_latencies(load, op='INSERT')
-            results.append({
-                'server': server,
-                'workload': 'workloada',
-                'op': 'INSERT',
-                'throughput': self._extract_throughput(load),
-                'latencies': self._extract_results(
-                    op='INSERT', latencies=latencies)
-            })
-            for workload in self.workloads:
-                print('Running %(workload)s on server: %(server)s\n' %locals())
-                load = self.docker_client.containers.run(
-                    image=ycsb_img,
-                    init=True,
-                    network_mode='host',
-                    command=self.command(kind='run', server=server)
-                ).decode('utf8')
-                for op in ['READ', 'UPDATE']:
-                    latencies = self._extract_latencies(load, op=op)
-                    results.append({
-                        'server': server,
-                        'workload': workload,
-                        'op': op,
-                        'throughput': self._extract_throughput(load),
-                        'latencies': self._extract_results(
-                            op='INSERT', latencies=latencies)
-                    })
-
-        if html:  # write to HTML
-            with open('results.html', 'w') as f:
-                workloads = list({s['workload'] for s in results})
-                workload_ops = {}
-                for workload in workloads:
-                    workload_ops[workload] = [s for s in results if s['workload'] == workload]
-                context = {
-                    'workloads': workloads,
-                    'workload_ops': workload_ops
-                    }
-                f.write(self._render_html(context=context))
-        if stdout:  # print to terminal
-            print(results)
-        return 'Finshed tests'
+        return '%(kind)s %(server)s -s %(param)s \
+                -P workloads/%(workload)s %(auka)s' % locals()
 
     def _has_missing_fields(self):
         return bool(set(self.config.sections()) - set(['YCSB',
@@ -111,20 +94,66 @@ class YcsbTest(object):
         return {key: config['SERVER'][key] for key in config['SERVER'].keys()}
 
     def _parse_workloads(self):
-        workloads = [key for key in config['WORKLOAD'].keys()]
+        workloads = [wrkload for wrkload in config['WORKLOAD'].keys()]
         if 'all' in workloads:
             return ['workload'+i for i in ['a', 'b', 'c', 'd', 'e', 'f']]
         return workloads
 
+    def _write_html(self, results):
+        with open('results.html', 'w') as f:
+            workloads = list({s['workload'] for s in results})
+            workload_ops = {}
+            for workload in workloads:
+                workload_ops[workload] = [s for s in results
+                                          if s['workload'] == workload]
+            context = {
+                'workloads': workloads,
+                'workload_ops': workload_ops
+                }
+            f.write(self._render_html(context=context))
+
+    def update_result(self, load, latencies, **kwargs):
+        self.results.append({
+                'server': kwargs.get('server'),
+                'workload': kwargs.get('workload'),
+                'op': kwargs.get('op'),
+                'throughput': self._extract_throughput(load),
+                'latencies': self._extract_stats(
+                    op=kwargs.get('op'),
+                    latencies=latencies)
+            })
+
+    def run_container(self, image, command):
+        return self.docker_client.containers.run(
+                image=image,
+                init=True,
+                network_mode='host',
+                detach=True,
+                command=command
+        )
+
+    @staticmethod
+    def _status(container, stdout):
+        for log in container.logs(stream=True):
+            log = log.decode('utf8')
+            if 'operations' in log:
+                if stdout:
+                    print(log.strip())
+
+    @staticmethod
+    def _extract_overall(container):
+        logs = container.logs(tail=30).decode('utf8')
+        return ''.join(
+            [log+'\n' for log in logs.split('\n') if log.startswith('[')]
+        )
+
     @staticmethod
     def _extract_throughput(result):
-        return round(
-            float(
-                ''.join(
+        print(result)
+        return round(float(''.join(
                         [s.split(',')[2] for s in result.split('\n')
                          if 'Throughput(ops/sec)' in s]
-                        )
-                  ), 1)
+                         )), 1)
 
     @staticmethod
     def _extract_latencies(result, op='INSERT'):
@@ -132,7 +161,7 @@ class YcsbTest(object):
                 if op in s and 'Latency' in s]
 
     @staticmethod
-    def _extract_results(op='READ', latencies=[]):
+    def _extract_stats(op='READ', latencies=[]):
         if len(latencies) == 0:
             raise Exception('Cant extract results check the loads')
         return {

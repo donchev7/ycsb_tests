@@ -26,7 +26,7 @@ Terrafrom will provision an AWS managed Elasticache Node (redis) m3.large and 4x
 
 After terraform has provisioned the infrastructure you can run the ycsb.py script from your laptop. The python script will use the docker api and connect to the remote ec2 instance to perform the tests. In order for this to work you will need to run the script as follows:
 ```bash
-python ycsb.py run --html=True --stdout=True --config_file='ycsb_conf.dat' --docker_host='tcp://54.246.252.45:2375'
+python ycsb.py run --html=True --stdout=True --config_file='ycsb_conf.dat' --docker_host='tcp://<IP>:2375'
 ```
 Change the docker host IP with the IP terraform provided you in the previous step (YCSB-Tester)
 
