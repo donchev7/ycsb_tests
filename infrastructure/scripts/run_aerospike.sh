@@ -41,11 +41,7 @@ namespace ycsb {
 	replication-factor 1
 	memory-size 15G
 	default-ttl 5d
-	storage-engine device {
-		file /opt/aerospike/data/test.dat
-		filesize 4G
-		data-in-memory true # Store data in memory in addition to file.
-	}
+	storage-engine memory
 }
 EOF
 

@@ -4,22 +4,25 @@ operationcount=5000000
 threadcount=100
 
 [SERVER]
-redis=10.0.16.13
+redis=10.0.16.10
 elasticache=elasticache-ycsb.jkzj1v.0001.euw1.cache.amazonaws.com
-tarantool=10.0.16.6
-aerospike=10.0.16.12
+tarantool=10.0.16.12
+aerospike=10.0.16.11
 
+
+
+[WORKLOAD]
 # Can be used for 
 # individual workloads
 # workloada=True
 # workloadb=True
 # or for all workloads
 # all=True
-
-[WORKLOAD]
 workloada=True
 workloadb=True
-#all=True
+workloadc=True
+workloadd=True
+workloade=True
 
 # workloada is Update heavy with 50/50 read/write
 # workloadb is 95/5 read/write 

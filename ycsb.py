@@ -25,7 +25,7 @@ class YcsbTest(object):
     def __init__(self,
                  docker_host='unix:///var/run/docker.sock',
                  config_file='ycsb_conf.dat'):
-        self.docker_client = DockerClient(base_url=docker_host)
+        self.docker_client = DockerClient(base_url=docker_host, timeout=2)
         self.config = config
         self.config.read(config_file)
         self.servers = self._parse_servers()
@@ -137,9 +137,8 @@ class YcsbTest(object):
     def _status(container, stdout):
         for log in container.logs(stream=True):
             log = log.decode('utf8')
-            if 'operations' in log:
-                if stdout:
-                    print(log.strip())
+            if 'operations' in log and stdout:
+                print(log.strip())
 
     @staticmethod
     def _extract_overall(container):
