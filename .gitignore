@@ -2,5 +2,3 @@
 .vscode
 terraform.tfstate
 terraform.tfstate.backup
-results.html
-*.html

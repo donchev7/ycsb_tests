@@ -162,14 +162,20 @@ class YcsbTest(object):
     @staticmethod
     def _extract_stats(op='READ', latencies=[]):
         if len(latencies) == 0:
-            raise Exception('Cant extract results check the loads')
+            return {
+                'avg': -1,
+                'min': -1,
+                'max': -1,
+                '95p': -1,
+                '99p': -1
+            }
         return {
                 'avg': round(float(latencies[0].split(',')[2])/1000, 2),
                 'min': round(float(latencies[1].split(',')[2])/1000, 2),
                 'max': round(float(latencies[2].split(',')[2])/1000, 2),
                 '95p': round(float(latencies[3].split(',')[2])/1000, 2),
                 '99p': round(float(latencies[4].split(',')[2])/1000, 2)
-            }
+        }
 
     @staticmethod
     def _render_html(tpl='results.jinja2', context={}):
