@@ -1,7 +1,7 @@
 # YCSB Tests
 ## for Aerospike, AWS Elasticache, Redis and Tarantool
 
-For more information about this repository read the post [here](http://donchev.is).
+For more information about this repository read the post [here](https://donchev.is/post/aerospike-vs-redis-vs-tarantool).
 
 To do the tests yourself start by building the ycsb container:
 ```code bash
